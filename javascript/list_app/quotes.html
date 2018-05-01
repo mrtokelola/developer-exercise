@@ -20,6 +20,9 @@
           quotes: [],
           page_number: 0
         };
+
+        this.handleClickPrevious = this.handleClickPrevious.bind(this);
+        this.handleClickNext = this.handleClickNext.bind(this);
       }
 
       componentDidMount() {
@@ -30,11 +33,28 @@
           )
       }
 
+      handleClickPrevious() {
+        console.log("you clicked previous");
+        if (this.state.page_number > 0) {
+            this.setState(prevState => ({page_number: prevState.page_number - 1}));
+        }
+      }
+
+      handleClickNext() {
+        console.log("you clicked next");
+        if (this.state.page_number < this.state.quotes.length / 15 - 1) {
+          this.setState(prevState => ({page_number: prevState.page_number + 1}));
+        }
+      }
+
       render() {
         var currentQuotes = this.state.quotes.slice(this.state.page_number * 15, (this.state.page_number + 1) * 15);
         return (
           <div>
             <h1>Quotes</h1>
+            <h4>Page {this.state.page_number + 1}</h4>
+            <button onClick={this.handleClickPrevious}>Previous page</button>
+            <button onClick={this.handleClickNext}>Next page</button>
             <ul>
               {currentQuotes.map(quote =>
                 <li>{quote.quote} - {quote.source} - { quote.context} - {quote.theme}</li>
