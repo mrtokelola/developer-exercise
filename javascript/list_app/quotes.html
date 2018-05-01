@@ -17,7 +17,8 @@
         super(props);
 
         this.state = {
-          quotes: []
+          quotes: [],
+          page_number: 0
         };
       }
 
@@ -30,11 +31,12 @@
       }
 
       render() {
+        var currentQuotes = this.state.quotes.slice(this.state.page_number * 15, (this.state.page_number + 1) * 15);
         return (
           <div>
             <h1>Quotes</h1>
             <ul>
-              {this.state.quotes.map(quote =>
+              {currentQuotes.map(quote =>
                 <li>{quote.quote} - {quote.source} - { quote.context} - {quote.theme}</li>
               )}
             </ul>
