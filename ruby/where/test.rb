@@ -1,5 +1,59 @@
 require 'minitest/autorun'
 
+module Searchable
+  def where(options)
+    # options are given (like search for :name => 'The Wolf')
+    # self is the array itself (like [@boris, @charles, @wolf, @glen])
+    # check each item in the array
+    #   compare each key/value from options to each item
+    #   (check if item[:name] matches options[:name].request_hit)
+
+
+     return self.select do |item|
+       match = true
+       options.each do |key, value|
+         if value.instance_of? Regexp
+           if !item[key].match?(value)
+             match = false
+           end
+         else
+           if item[key] != value
+             match = false
+           end
+         end
+       end
+       match
+     end
+
+    # result = []
+    # self.each do |item|
+    #   match = true
+    #   options.each do |key, value|
+    #     if value.instance_of? Regexp
+    #       if !item[key].match?(value)
+    #         match = false
+    #       end
+    #     else
+    #       if item[key] != value
+    #         match = false
+    #       end
+    #     end
+    #   end
+    #   if match
+    #     result << item
+    #   end
+    # end
+    # return result
+
+
+  end
+end
+
+class Array
+  include Searchable
+end
+
+
 class WhereTest < Minitest::Test
   def setup
     @boris   = {:name => 'Boris The Blade', :quote => "Heavy is good. Heavy is reliable. If it doesn't work you can always hit them.", :title => 'Snatch', :rank => 4}
@@ -11,7 +65,7 @@ class WhereTest < Minitest::Test
   end
 
   def test_where_with_exact_match
-    assert_equal [@wolf], @fixtures.where(:name => 'The Wolf'),
+    assert_equal [@wolf], @fixtures.where(:name => 'The Wolf')
   end
 
   def test_where_with_partial_match
